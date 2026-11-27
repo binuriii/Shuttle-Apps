@@ -1,0 +1,148 @@
+/* SiteFooter.css - uses your existing tokens: --bg, --muted, --pad-x, --pad-y
+   Padding and type scale match About.css.
+   Fallbacks are provided so it also works standalone. */
+
+.footer {
+  --ft-bg: var(--bg, #060403);
+  --ft-surface: #100e0d;               /* a touch lighter than the page so the rounded corners show */
+  --ft-muted: var(--muted, #8b8782);
+  --ft-line: rgba(255, 255, 255, 0.12);
+  --ft-px: var(--pad-x, 5vw);
+  --ft-py: var(--pad-y, 3rem);
+  --ft-radius: clamp(1.6rem, 4vw, 3.5rem);
+  --ft-mark-size: 21vw;                /* size of the SHUTTLE wordmark */
+
+  position: relative;
+  overflow: hidden;
+  padding: calc(var(--ft-py) + 3rem) var(--ft-px) 0;   /* same top/side padding as About */
+  border-radius: var(--ft-radius) var(--ft-radius) 0 0; /* rounded top corners */
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 255, 255, 0.07) 0%, transparent 70%),
+    var(--ft-surface);
+  color: #fff;
+}
+
+/* ---------- Top row: links | about | links ---------- */
+.footer-top {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+.footer-links--right { align-items: flex-end; text-align: right; }
+
+.footer-links a {
+  position: relative;
+  font-size: 0.72rem;                 /* same small text size as About captions */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.2rem 0;
+  transition: color 0.25s ease;
+}
+.footer-links a::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.footer-links a:hover { color: var(--ft-muted); }
+.footer-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+.footer-links a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+
+.footer-about {
+  justify-self: center;
+  max-width: 24rem;
+  text-align: center;
+  font-weight: 300;
+  font-size: clamp(1rem, 1.5vw, 1.6rem);   /* same as About tagline */
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Big wordmark (animated by FoldText) ---------- */
+.footer-mark {
+  margin: clamp(3rem, 8vw, 7rem) 0 0;
+  text-align: center;
+  white-space: nowrap;
+  user-select: none;
+  /* fades out toward the bottom edge */
+  -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 45%, transparent 100%);
+}
+
+/* ---------- Bottom bar ---------- */
+.footer-bottom {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  margin-top: -1.2rem;
+  padding: 1.4rem 0 1.8rem;
+  border-top: 1px solid var(--ft-line);
+  background: var(--ft-surface);
+}
+.footer-bottom p {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ft-muted);
+}
+.footer-tagline { text-align: center; }
+.footer-plus {
+  justify-self: end;
+  font-weight: 300;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--ft-muted);
+}
+
+/* ---------- Responsive (same breakpoints as About) ---------- */
+@media (max-width: 900px) {
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 2.4rem;
+  }
+  .footer-about {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: start;
+    text-align: left;
+    max-width: 20rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .footer { --ft-mark-size: 22vw; }
+
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-links--right { align-items: flex-start; text-align: left; }
+  .footer-about { grid-row: auto; }
+
+  .footer-bottom {
+    grid-template-columns: 1fr auto;
+    row-gap: 0.8rem;
+    padding-bottom: 1.4rem;
+  }
+  .footer-tagline { grid-column: 1; grid-row: 2; text-align: left; }
+  .footer-plus { grid-column: 2; grid-row: 1 / span 2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-links a::after { transition: none; }
+}

@@ -1,0 +1,221 @@
+.faq {
+  --f-bg: var(--bg, #060403);
+  --f-muted: var(--muted, #8b8782);
+  --f-glow: #363636;                       /* same glow as About */
+  --f-panel: rgba(255, 255, 255, 0.025);   /* outer rounded frame */
+  --f-card: #131416;                       /* question cards */
+  --f-line: rgba(255, 255, 255, 0.07);
+  --f-px: var(--pad-x, 5vw);
+  --f-py: var(--pad-y, 3rem);
+
+  position: relative;
+  /* About: height 115vh / min-height 680px. min-height (not height) here so open
+     answers can grow the section instead of being cut off. */
+  min-height: max(115vh, 680px);
+  /* About: top pad-y + 3rem, sides pad-x. Bottom is 6rem (About's own phone value)
+     so the last card never touches the edge. */
+  padding: calc(var(--f-py) + 5rem) var(--f-px) 12rem;
+  background:
+    radial-gradient(ellipse 45% 55% at 50% 62%, var(--f-glow) 0%, transparent 70%),
+    var(--f-bg);
+  color: #fff;
+}
+
+/* ---------- Headline + intro (About's .about-head) ---------- */
+.faq-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: clamp(2.5rem, 6vw, 5rem);
+  position: relative;
+  z-index: 3;
+}
+
+.faq-title {
+  font-weight: 300;
+  font-size: clamp(2.4rem, 4.2vw, 4.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  white-space: pre-line;                     /* honours the \n in the heading */
+}
+
+.faq-intro {
+  margin-top: 0.4rem;
+  font-weight: 300;
+  font-size: clamp(1rem, 1.5vw, 1.6rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  max-width: 17rem;
+}
+
+/* ---------- Layout: contact card left, questions right ---------- */
+.faq-body {
+  display: grid;
+  grid-template-columns: minmax(15rem, 1fr) 2fr;
+  gap: 2rem;                                 /* About: column-gap 2rem */
+  align-items: start;
+  position: relative;
+  z-index: 3;
+}
+
+/* ---------- Questions ---------- */
+.faq-list {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--f-panel);
+  border: 1px solid var(--f-line);
+  border-radius: 2rem;
+}
+
+.faq-item {
+  background: var(--f-card);
+  border: 1px solid var(--f-line);
+  border-radius: 1.4rem;
+  transition: background 0.3s ease;
+}
+.faq-item.is-open { background: #17181b; }
+
+.faq-q-wrap { font-weight: inherit; font-size: inherit; }
+
+.faq-q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(1.2rem, 2vw, 2rem);
+  border: 0;
+  background: none;
+  color: #fff;
+  font: inherit;
+  font-weight: 300;
+  font-size: clamp(1rem, 1.5vw, 1.6rem);     /* About's tagline size */
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 1.4rem;
+  -webkit-tap-highlight-color: transparent;
+}
+.faq-q:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: -2px;
+}
+
+.faq-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--f-line);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease;
+}
+.faq-item.is-open .faq-icon {
+  transform: rotate(180deg);
+  background: rgba(255, 255, 255, 0.12);
+}
+.faq-q:hover .faq-icon { background: rgba(255, 255, 255, 0.12); }
+
+/* Answer: height animates from 0 to its content */
+.faq-a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.faq-item.is-open .faq-a { grid-template-rows: 1fr; }
+
+.faq-a-inner { overflow: hidden; }
+.faq-a-inner p {
+  padding: 0 clamp(1.2rem, 2vw, 2rem) clamp(1.2rem, 2vw, 2rem);
+  max-width: 44rem;
+  font-size: 0.72rem;                        /* About's caption text */
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.85);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.faq-item.is-open .faq-a-inner p { opacity: 1; transition-delay: 0.1s; }
+
+/* ---------- Contact card ---------- */
+.faq-aside {
+  grid-column: 1;
+  grid-row: 1;
+  position: sticky;
+  top: calc(var(--f-py) + 4rem);             /* clears the fixed site header */
+}
+
+.faq-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  min-height: 17rem;
+  padding: clamp(1.2rem, 2vw, 2rem);
+  background: var(--f-card);
+  border: 1px solid var(--f-line);
+  border-radius: 1.4rem;
+}
+
+.faq-card-title {
+  font-weight: 300;
+  font-size: clamp(1rem, 1.5vw, 1.6rem);     /* About's tagline size */
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.faq-card-text {
+  margin-top: 0.9rem;                        /* About: caption-text margin */
+  max-width: 17rem;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.faq-card-link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-size: 0.72rem;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 0.15rem;
+  transition: border-color 0.25s ease, gap 0.25s ease;
+}
+.faq-card-link:hover { border-color: #fff; gap: 0.75rem; }
+.faq-card-link:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+
+/* ---------- Responsive (same breakpoints as About) ---------- */
+@media (max-width: 900px) {
+  .faq-head { flex-direction: column; gap: 1.2rem; }
+  .faq-intro { max-width: 20rem; }
+
+  .faq-body { grid-template-columns: 1fr; }
+  .faq-list { grid-column: 1; grid-row: 1; }
+  .faq-aside { grid-column: 1; grid-row: 2; position: static; }
+  .faq-card { min-height: 0; }
+}
+
+@media (max-width: 520px) {
+  .faq { min-height: 100svh; padding-bottom: 6rem; }   /* same as About */
+  .faq-body { gap: 0.7rem; }
+  .faq-list { padding: 0.7rem; gap: 0.7rem; border-radius: 1.4rem; }
+  .faq-card { gap: 1.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-item,
+  .faq-icon,
+  .faq-a,
+  .faq-a-inner p,
+  .faq-card-link { transition: none; }
+}

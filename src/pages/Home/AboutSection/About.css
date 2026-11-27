@@ -1,0 +1,183 @@
+/* About.css — uses your existing tokens: --bg, --muted, --pad-x, --pad-y
+   Fallbacks are provided so it also works standalone. */
+
+.about {
+  --a-bg: var(--bg, #060403);
+  --a-muted: var(--muted, #8b8782);
+  --a-glow: #363636;           /* warm ember glow behind the phone */
+  --a-px: var(--pad-x, 5vw);
+  --a-py: var(--pad-y, 3rem);
+  --rise: 0.54;                /* 0 → 1 over the whole scroll pass, set by About.js */
+
+  position: relative;
+  height: 115vh;
+  min-height: 680px;
+  overflow: hidden;
+  padding: calc(var(--a-py) + 3rem) var(--a-px) 0;
+  background:
+    radial-gradient(ellipse 45% 55% at 50% 62%, var(--a-glow) 0%, transparent 70%),
+    var(--a-bg);
+  color: #fff;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  column-gap: 2rem;
+}
+
+/* ---------- Headline + tagline ---------- */
+.about-head {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  position: relative;
+  z-index: 3;
+}
+
+.about-title {
+  font-weight: 300;
+  font-size: clamp(2.4rem, 4.2vw, 4.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  max-width: 11ch;
+}
+
+.about-tagline {
+  margin-top: 0.4rem;
+  font-weight: 300;
+  font-size: clamp(1rem, 1.5vw, 1.6rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  max-width: 17rem;
+}
+
+.about-line { display: block; }
+.about-muted { color: var(--a-muted); }
+
+/* ---------- Concentric rings behind the image ---------- */
+.about-rings {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: min(120vh, 110vw);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(250, 230, 218, 0.08);
+  box-shadow:
+    0 0 0 8vh rgba(227, 215, 208, 0.03),
+    inset 0 0 0 8vh rgba(246, 236, 231, 0.025);
+  pointer-events: none;
+}
+
+/* ---------- Hand + phone image ---------- */
+.about-stage {
+  --tilt-x: 0deg;   /* set by About.js */
+  --tilt-y: 0deg;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  perspective: 1200px;
+  z-index: 2;
+  margin-top: -2vh;
+}
+
+.about-device {
+  width: clamp(280px, 34vw, 580px);
+  /* Parallax: starts 26vh low, sits in place at the middle of the scroll pass,
+     and ends 22vh high. Reverses when scrolling back up. */
+  transform:
+    translateY(calc(26vh - var(--rise) * 48vh))
+    rotateX(var(--tilt-x))
+    rotateY(var(--tilt-y));
+  opacity: min(1, calc(0.35 + var(--rise) * 3));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.about-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6));
+}
+
+/* ---------- Caption (bottom-left) ---------- */
+.about-caption {
+  position: absolute;
+  left: var(--a-px);
+  bottom: 18vh;
+  max-width: 15rem;
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  z-index: 3;
+}
+
+.about-caption-icon {
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  position: relative;
+  margin-top: -0.1rem;
+}
+.about-caption-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0.45rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.about-caption-label {
+  font-size: 0.72rem;
+  color: var(--a-muted);
+}
+
+.about-caption-text {
+  margin-top: 0.9rem;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ---------- Soft fade at the bottom ---------- */
+.about::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 22vh;
+  background: linear-gradient(to bottom, transparent, var(--a-bg));
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .about-head { flex-direction: column; gap: 1.2rem; }
+  .about-title { max-width: none; }
+  .about-tagline { max-width: 20rem; }
+  .about-device { width: clamp(280px, 70vw, 520px); }
+  .about-caption { bottom: 22vh; max-width: 12rem; }
+}
+
+@media (max-width: 520px) {
+  .about { height: auto; min-height: 100svh; padding-bottom: 6rem; }
+  .about-stage { margin-top: 2rem; }
+  .about-device { width: 100%; }
+  .about-caption {
+    position: relative;
+    left: auto; bottom: auto;
+    grid-column: 1 / -1;
+    margin-top: 2rem;
+    max-width: none;
+  }
+}

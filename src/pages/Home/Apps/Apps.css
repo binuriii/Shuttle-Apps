@@ -1,0 +1,207 @@
+/* Apps.css — uses your existing tokens: --bg, --muted, --pad-x, --pad-y
+   Fallbacks are provided so it also works standalone. */
+
+.apps {
+  --a-bg: var(--bg, #060403);
+  --a-muted: var(--muted, #8b8782);
+  --a-px: var(--pad-x, 5vw);
+  --a-py: var(--pad-y, 3rem);
+
+  position: relative;
+  overflow: hidden;
+  padding: calc(var(--a-py) + 2rem) var(--a-px) 3rem;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 62%, rgba(255, 255, 255, 0.07) 0%, transparent 70%),
+    var(--a-bg);
+  color: #fff;
+}
+
+/* ---------- Headline + tagline (centered) ---------- */
+.apps-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.1rem;
+  position: relative;
+  z-index: 3;
+}
+
+.apps-title {
+  font-weight: 300;
+  font-size: clamp(2rem, 3.4vw, 3.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.apps-tagline {
+  font-weight: 300;
+  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
+  line-height: 1.4;
+  letter-spacing: 0;
+  max-width: 28rem;
+}
+
+.apps-line { display: block; }
+.apps-muted { color: var(--a-muted); }
+
+/* ---------- Carousel ---------- */
+.apps-carousel {
+  --card-w: 300px;   /* set by Apps.js */
+  --card-h: 650px;
+  --img-zoom: 1.15;  /* phone size inside its card: raise = bigger, lower = smaller */
+
+  position: relative;
+  /* break out of the section padding so the ring can use the full page width */
+  width: calc(100% + var(--a-px) * 2);
+  margin: 1rem calc(var(--a-px) * -1) 0;
+  height: clamp(640px, 92vh, 900px);
+  outline: none;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: grab;
+}
+.apps-carousel[data-dragging] { cursor: grabbing; }
+.apps-carousel:focus-visible {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25);
+  border-radius: 1rem;
+}
+
+/* soft floor glow under the ring */
+.apps-carousel::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 70px;
+  width: 55%;
+  height: 40px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.1), transparent 70%);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.apps-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.apps-carousel[data-ready] .apps-stage { opacity: 1; }
+
+.apps-camera,
+.apps-ring,
+.apps-card {
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+.apps-camera { position: relative; }
+.apps-ring,
+.apps-card { position: absolute; left: 0; top: 0; }
+
+/* ---------- Cards ---------- */
+/* The PNG mockup is the card: no clipping, no border, no gradient. */
+.apps-face {
+  position: absolute;
+  left: calc(var(--card-w) / -2);
+  top: calc(var(--card-h) / -2);
+  width: var(--card-w);
+  height: var(--card-h);
+  outline: 1px solid transparent;           /* smooths edges in 3D */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: transparent;
+}
+.apps-face--back { transform: rotateY(180deg); }
+
+.apps-face img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  transform: scale(var(--img-zoom, 1.15));
+  /* far cards dim smoothly via --depth (set by Apps.js) */
+  filter:
+    brightness(calc(1 - var(--depth, 0) * 0.85))
+    drop-shadow(0 24px 36px rgba(0, 0, 0, 0.55));
+}
+
+/* the inside of the ring: heavily darkened so it never clutters the view */
+.apps-face--back img {
+  filter: brightness(0.18) drop-shadow(0 24px 36px rgba(0, 0, 0, 0.4));
+}
+
+/* ---------- Caption ---------- */
+.apps-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 18px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 16px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.apps-caption-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  line-height: 1.35;
+  animation: apps-title-in 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.apps-caption-sub {
+  color: var(--a-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+.apps-caption-count {
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--a-muted);
+  opacity: 0.7;
+}
+
+.apps-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@keyframes apps-title-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .apps-carousel { height: clamp(520px, 75vh, 700px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apps-stage { transition: none; }
+  .apps-caption-title { animation: none; }
+}

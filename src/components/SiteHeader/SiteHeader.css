@@ -1,0 +1,216 @@
+/* SiteHeader.css — uses your existing tokens: --bg, --muted, --pad-x
+   Fallbacks are provided so it also works standalone. */
+
+.site-header {
+  --h-bg: var(--bg, #060403);
+  --h-muted: var(--muted, #8b8782);
+  --h-px: var(--pad-x, 5vw);
+  --h-glass: rgba(255, 255, 255, 0.08);
+  --h-glass-line: rgba(255, 255, 255, 0.12);
+  --h-pill: rgba(255, 255, 255, 0.92);   /* active link background */
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1rem var(--h-px) 0;
+  color: #fff;
+  pointer-events: none;                   /* only the pills catch clicks */
+}
+
+.site-header-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* ---------- Brand ---------- */
+.site-header-brand {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.2rem 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-decoration: none;
+  pointer-events: auto;
+}
+.site-header-mark { flex: none; }
+
+/* your logo image: set the height, width follows the image */
+.site-header-logo {
+  display: block;
+  height: 3rem;            /* raise/lower to resize the logo */
+  width: auto;
+  max-width: 10rem;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ---------- Glass pill (shared by nav, CTA and burger) ---------- */
+.site-header-nav,
+.site-header-cta,
+.site-header-burger,
+.site-header-panel {
+  background: var(--h-glass);
+  border: 1px solid var(--h-glass-line);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* ---------- Center nav ---------- */
+.site-header-nav {
+  justify-self: center;
+  padding: 6px;
+  border-radius: 999px;
+  pointer-events: auto;
+}
+
+.site-header-list {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-header-link {
+  display: block;
+  padding: 0.7rem 1.15rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  line-height: 1;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.site-header-link:hover { color: #fff; }
+.site-header-link:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.site-header-link.is-active {
+  background: var(--h-pill);
+  color: #0a0a0a;
+}
+
+/* ---------- CTA (right) ---------- */
+.site-header-cta {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 6px 6px 6px 1.5rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  color: #fff;
+  text-decoration: none;
+  pointer-events: auto;
+  transition: background 0.3s ease;
+}
+.site-header-cta:hover { background: rgba(255, 255, 255, 0.14); }
+.site-header-cta:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+.site-header-cta-icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: #fff;
+  color: #0a0a0a;
+  transition: transform 0.3s ease;
+}
+.site-header-cta:hover .site-header-cta-icon { transform: translateX(2px); }
+
+/* ---------- Burger (small screens only) ---------- */
+.site-header-burger {
+  display: none;
+  justify-self: end;
+  width: 2.9rem;
+  height: 2.9rem;
+  padding: 0;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  pointer-events: auto;
+  place-items: center;
+}
+.site-header-burger:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+.site-header-burger-lines {
+  position: relative;
+  width: 18px;
+  height: 12px;
+}
+.site-header-burger-lines span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  border-radius: 1px;
+  background: currentColor;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease, top 0.35s ease;
+}
+.site-header-burger-lines span:nth-child(1) { top: 0; }
+.site-header-burger-lines span:nth-child(2) { top: 5px; }
+.site-header-burger-lines span:nth-child(3) { top: 10px; }
+.site-header-burger[aria-expanded='true'] span:nth-child(1) { top: 5px; transform: rotate(45deg); }
+.site-header-burger[aria-expanded='true'] span:nth-child(2) { opacity: 0; }
+.site-header-burger[aria-expanded='true'] span:nth-child(3) { top: 5px; transform: rotate(-45deg); }
+
+/* ---------- Mobile panel ---------- */
+.site-header-panel {
+  display: none;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 1.5rem;
+  background: rgba(14, 12, 11, 0.82);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.3s;
+}
+.site-header-panel.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.site-header-panel .site-header-list {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+}
+.site-header-panel .site-header-link {
+  padding: 1rem 1.2rem;
+  font-size: 1.05rem;
+}
+.site-header-panel .site-header-cta {
+  justify-self: stretch;
+  justify-content: space-between;
+  margin-top: 0.6rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .site-header-bar { grid-template-columns: 1fr auto; }
+  .site-header-nav,
+  .site-header-bar > .site-header-cta { display: none; }
+  .site-header-burger { display: grid; }
+  .site-header-panel { display: block; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header-link,
+  .site-header-cta,
+  .site-header-cta-icon,
+  .site-header-burger-lines span,
+  .site-header-panel { transition: none; }
+}

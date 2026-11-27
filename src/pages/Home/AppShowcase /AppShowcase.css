@@ -1,0 +1,255 @@
+/* AppShowcase.css - uses your existing tokens: --bg, --muted, --pad-x, --pad-y
+   Section size, padding and type scale match About.css.
+   Fallbacks are provided so it also works standalone. */
+
+.showcase {
+  --s-bg: var(--bg, #060403);
+  --s-muted: var(--muted, #8b8782);
+  --s-px: var(--pad-x, 5vw);
+  --s-py: var(--pad-y, 3rem);
+
+  position: relative;
+  height: 115vh;                                   /* same as About */
+  min-height: 680px;                               /* same as About */
+  overflow: hidden;
+  padding: calc(var(--s-py) + 3rem) var(--s-px) 0; /* same as About */
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 55%, rgba(255, 255, 255, 0.07) 0%, transparent 70%),
+    var(--s-bg);
+  color: #fff;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+}
+
+/* ---------- Heading (same layout as About) ---------- */
+.showcase-head {
+  grid-row: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  text-align: left;
+  position: relative;
+  z-index: 3;
+}
+
+.showcase-title {
+  font-weight: 300;
+  font-size: clamp(2.4rem, 4.2vw, 4.6rem);        /* same as About */
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  max-width: 13ch;                                /* two lines */
+  text-wrap: balance;                             /* even line lengths: "Every app," / "one tap away." */
+}
+
+.showcase-sub {
+  margin-top: 0.4rem;
+  font-weight: 300;
+  font-size: clamp(1rem, 1.5vw, 1.6rem);          /* same as About */
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  max-width: 17rem;
+  color: #fff;                                    /* use var(--s-muted) for grey */
+}
+
+/* ---------- Stage ---------- */
+.showcase-stage {
+  --k: 1;          /* horizontal spacing multiplier (smaller on phones) */
+  --w: 240px;      /* width of the center phone box */
+  --zoom: 1.2;     /* raise if phones look small (PNG has empty margins) */
+
+  grid-row: 2;
+  position: relative;
+  z-index: 2;
+  /* break out of the section padding so the strip can use the full page width */
+  width: calc(100% + var(--s-px) * 2);
+  margin: -2vh calc(var(--s-px) * -1) 0;
+  min-height: 0;
+  outline: none;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.showcase-stage:focus-visible {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25);
+  border-radius: 1rem;
+}
+
+/* ---------- Cards ---------- */
+.showcase-item {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: var(--w);
+  aspect-ratio: 9 / 19.5;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform: translate(-50%, -50%) translateX(calc(var(--x) * var(--k))) scale(var(--s));
+  opacity: var(--o);
+  transition:
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.5s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.showcase-item[style*='--o: 0'] { pointer-events: none; }
+.showcase-item.is-active { cursor: default; }
+.showcase-item:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 6px;
+  border-radius: 28px;
+}
+
+.showcase-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  transform: scale(var(--zoom));
+  filter: brightness(var(--b, 1)) drop-shadow(0 24px 36px rgba(0, 0, 0, 0.55));
+  transition: filter 0.6s ease;
+}
+.showcase-item:not(.is-active):hover img {
+  filter: brightness(calc(var(--b, 1) + 0.25)) drop-shadow(0 24px 36px rgba(0, 0, 0, 0.55));
+}
+
+/* ---------- Info: bottom-left corner of the section ---------- */
+.showcase-info {
+  position: absolute;
+  left: var(--s-px);
+  right: var(--s-px);
+  bottom: 3rem;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  pointer-events: none;           /* only the link and dots are clickable */
+}
+
+.showcase-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  text-align: left;
+  pointer-events: auto;
+  animation: showcase-in 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.showcase-name {
+  font-weight: 300;
+  font-size: clamp(1.4rem, 2vw, 1.9rem);
+  letter-spacing: -0.02em;
+}
+
+.showcase-cat {
+  color: var(--s-muted);
+  font-size: 0.9rem;
+}
+
+.showcase-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  background: #fff;
+  color: #0a0a0a;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+.showcase-link:hover { transform: translateY(-1px); background: #e9e7e4; }
+.showcase-link:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+/* ---------- Dots (centered at the bottom) ---------- */
+.showcase-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 0.4rem;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.showcase-dot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: background 0.3s ease, width 0.3s ease, border-radius 0.3s ease;
+}
+.showcase-dot.is-active {
+  width: 20px;
+  border-radius: 3px;
+  background: #fff;
+}
+
+@keyframes showcase-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Scroll reveal (simple) ----------
+   AppShowcase.js adds .is-visible when the section scrolls into view.
+   Heading, phones and info fade up one after another, once. */
+.showcase-head,
+.showcase-stage,
+.showcase-info {
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.showcase-stage { transition-delay: 0.15s; }
+.showcase-info  { transition-delay: 0.3s; }
+
+.showcase:not(.is-visible) .showcase-head  { opacity: 0; transform: translateY(28px); }
+.showcase:not(.is-visible) .showcase-stage { opacity: 0; transform: translateY(48px); }
+.showcase:not(.is-visible) .showcase-info  { opacity: 0; transform: translateY(20px); }
+
+/* ---------- Responsive (same breakpoints as About) ---------- */
+@media (max-width: 900px) {
+  .showcase-stage { --k: 0.7; --w: 220px; }
+  .showcase-head { flex-direction: column; gap: 1.2rem; }
+  .showcase-sub { max-width: 20rem; }
+}
+
+@media (max-width: 520px) {
+  .showcase { height: auto; min-height: 100svh; padding-bottom: 6rem; }
+  .showcase-stage { --k: 0.5; --w: 200px; height: 520px; margin-top: 2rem; }
+
+  /* no room in the corner: stack the info under the phones, centered */
+  .showcase-info {
+    position: static;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.6rem;
+    margin-top: 0.5rem;
+  }
+  .showcase-meta { align-items: center; text-align: center; }
+  .showcase-dots { position: static; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase-item,
+  .showcase-item img,
+  .showcase-dot { transition: none; }
+  .showcase-meta { animation: none; }
+
+  /* no reveal: everything is visible straight away */
+  .showcase-head,
+  .showcase-stage,
+  .showcase-info { transition: none; }
+  .showcase:not(.is-visible) .showcase-head,
+  .showcase:not(.is-visible) .showcase-stage,
+  .showcase:not(.is-visible) .showcase-info { opacity: 1; transform: none; }
+}

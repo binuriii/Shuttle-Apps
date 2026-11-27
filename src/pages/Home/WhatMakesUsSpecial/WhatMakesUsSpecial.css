@@ -1,0 +1,175 @@
+/* WhatMakesUsSpecial.css - uses your existing tokens: --bg, --muted, --pad-x, --pad-y
+   Fallbacks are provided so it also works standalone. */
+
+.special {
+  --s-bg: var(--bg, #060403);
+  --s-muted: var(--muted, #8b8782);
+  --s-panel: #1a1b1d;          /* outer rounded panel */
+  --s-card: #0e1013;           /* inner cards */
+  --s-px: var(--pad-x, 5vw);
+  --s-py: var(--pad-y, 3rem);
+
+  position: relative;
+  padding: calc(var(--s-py) + 3rem) var(--s-px) calc(var(--s-py) + 3rem);
+  background: var(--s-bg);
+  color: #fff;
+}
+
+/* ---------- Headline + intro (centered) ---------- */
+.special-head {
+  --p: 1;                   /* 0 → 1 on scroll, set by WhatMakesUsSpecial.js */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.2rem;
+  margin-bottom: clamp(2.5rem, 6vw, 5rem);
+
+  /* scroll animation: fades in and drifts up */
+  opacity: var(--p);
+  transform: translateY(calc((1 - var(--p)) * 40px));
+  will-change: transform, opacity;
+}
+
+.special-title {
+  font-weight: 300;
+  font-size: clamp(2.4rem, 4.2vw, 4.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  max-width: none;
+  white-space: nowrap;      /* keep it on one line */
+  margin-inline: auto;
+}
+
+.special-tagline {
+  margin-top: 0;
+  font-weight: 300;
+  font-size: clamp(1rem, 1.5vw, 1.6rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  max-width: 34rem;
+  margin-inline: auto;
+}
+
+/* ---------- Bento panel ---------- */
+.special-panel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(15rem, auto);
+  grid-template-areas:
+    "a b d d"
+    "a c c e"
+    "f f g e";
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--s-panel);
+  border-radius: 2rem;
+}
+
+.area-a { grid-area: a; }
+.area-b { grid-area: b; }
+.area-c { grid-area: c; }
+.area-d { grid-area: d; }
+.area-e { grid-area: e; }
+.area-f { grid-area: f; }
+.area-g { grid-area: g; }
+
+/* ---------- Cards ---------- */
+.special-card {
+  --p: 1;                   /* 0 → 1 as the card scrolls into view, set by WhatMakesUsSpecial.js */
+  --mx: 50%;
+  --my: 0%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: clamp(1.2rem, 2vw, 2rem);
+  background:
+    radial-gradient(18rem circle at var(--mx) var(--my), rgba(255, 255, 255, 0.06), transparent 70%),
+    var(--s-card);
+  border-radius: 1.4rem;
+  overflow: hidden;
+
+  /* scroll animation: each card rises and fades in as it enters the screen */
+  opacity: var(--p);
+  transform: translateY(calc((1 - var(--p)) * 70px)) scale(calc(0.95 + var(--p) * 0.05));
+  will-change: transform, opacity;
+}
+
+.special-num {
+  font-weight: 300;
+  font-size: clamp(2.4rem, 4.2vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.special-card-title {
+  font-weight: 300;
+  font-size: clamp(1rem, 1.5vw, 1.6rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.special-card-text {
+  margin-top: 0.9rem;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 24rem;
+}
+
+/* ---------- Decorative tile ---------- */
+.special-visual {
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: #000;
+}
+
+.special-sphere {
+  width: min(100%, 22rem);
+  height: 100%;
+  max-height: 100%;
+  fill: rgba(255, 255, 255, 0.85);
+  /* the dotted sphere turns slowly as the tile comes in */
+  transform: rotate(calc((1 - var(--p)) * -25deg));
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .special-head { flex-direction: column; gap: 1.2rem; }
+  .special-tagline { max-width: 20rem; }
+
+  .special-panel {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "d d"
+      "a b"
+      "c e"
+      "f g";
+  }
+  .special-visual { min-height: 14rem; }
+}
+
+@media (max-width: 520px) {
+  .special-title {
+    white-space: normal;
+    font-size: clamp(1.9rem, 9vw, 2.6rem);
+  }
+
+  .special-panel {
+    grid-template-columns: 1fr;
+    grid-template-areas: "d" "a" "b" "c" "e" "f" "g";
+    border-radius: 1.4rem;
+    padding: 0.7rem;
+    gap: 0.7rem;
+  }
+  .special-card { gap: 1.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .special-head,
+  .special-card,
+  .special-sphere { opacity: 1; transform: none; }
+}

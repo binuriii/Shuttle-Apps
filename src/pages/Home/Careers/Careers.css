@@ -1,0 +1,4 @@
+#careers {
+  padding: var(--pad-y) var(--pad-x);
+}
+#careers h2 { font-weight: 300; font-size: 2rem; }

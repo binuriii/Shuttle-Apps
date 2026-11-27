@@ -1,0 +1,4 @@
+#testimonials {
+  padding: var(--pad-y) var(--pad-x);
+}
+#testimonials h2 { font-weight: 300; font-size: 2rem; }
