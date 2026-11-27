@@ -8,7 +8,7 @@ defineProps({
   // Spaces in the filename must be written as %20.
   image: {
     type: String,
-    default: '/assests/Hand%20Holding%20Shuttle%20Apps%20Smartphone.png',
+    default: `${import.meta.env.BASE_URL}assests/HandHoldingShuttleAppsSmartphone.png`,
   },
   content: { type: Object, default: () => aboutContent },
 })
