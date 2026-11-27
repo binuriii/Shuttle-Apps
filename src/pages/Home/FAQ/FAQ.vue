@@ -1,5 +1,5 @@
 <script setup>
-import { faqContent, faqItems, useFaq } from './Faq.js'
+import { faqContent, faqItems, useFaq } from './FAQ.js'
 import './Faq.css'
 
 const props = defineProps({
