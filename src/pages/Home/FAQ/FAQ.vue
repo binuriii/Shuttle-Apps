@@ -1,6 +1,6 @@
 <script setup>
 import { faqContent, faqItems, useFaq } from './FAQ.js'
-import './Faq.css'
+import './FAQ.css'
 
 const props = defineProps({
   items: { type: Array, default: () => faqItems },
